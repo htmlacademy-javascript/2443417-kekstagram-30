@@ -1,19 +1,11 @@
+const timeToMinutes = (time) => {
+  const t = time.split(':');
+  return parseInt(t[0], 10) * 60 + parseInt(t[1], 10);
+};
 
-function lineLenght(str, lenght) {
-  return str.length <= lenght;
-}
-lineLenght('Все могут короли' , 8);
+const workTime = (dayStart, dayEnd, eventStart, eventDuration) => {
+  return timeToMinutes(dayStart) <= timeToMinutes(eventStart)
+    && timeToMinutes(dayEnd) >= timeToMinutes(eventStart) + eventDuration;
+};
 
-function palidrome (str) {
-  const checkStr = str.replaceAll(' ', '').toUpperCase();
-  let newStr = '';
-  for (let i = checkStr.length - 1; i >= 0; i--) {
-    newStr += checkStr[i];
-  }
-  if (checkStr === newStr) {
-    return 'Это палидром';
-  } else {
-    return 'Это не палидром';
-  }
-}
-palidrome('224422');
+workTime('14:00', '17:30', '08:0', 90);
