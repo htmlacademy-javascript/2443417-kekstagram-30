@@ -1,3 +1,5 @@
 import {createPhoto} from './data';
+import {renderPictures} from './renderPhoto';
 
-createPhoto();
+
+renderPictures(createPhoto());
