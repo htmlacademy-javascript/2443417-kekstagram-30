@@ -1,5 +1,5 @@
-import {createPhoto} from './data';
-import {renderPictures} from './renderPhoto';
+import {createPhoto} from './data.js';
+import {renderLargePicture} from './renderLargePhoto.js';
 
 
-renderPictures(createPhoto());
+renderLargePicture(createPhoto());
