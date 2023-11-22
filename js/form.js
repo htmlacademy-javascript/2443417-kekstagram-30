@@ -1,3 +1,5 @@
+import { init as initEffect, reset as resetEffect } from './effect.js';
+
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_COUNT = 140;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -33,6 +35,7 @@ const showModal = () => {
 const hideModal = () => {
   form.reset();
   pristine.reset();
+  resetEffect();
   overlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -112,5 +115,6 @@ pristine.addValidator(
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
 form.addEventListener('submit', onFormSubmit);
+initEffect();
 
 
