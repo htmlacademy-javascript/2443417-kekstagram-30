@@ -1,24 +1,36 @@
-const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
+import {showPicture} from './picture';
 
+const containerElement = document.querySelector('.pictures');
+const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
 
-const createPicture = ({url, description, likes, comments, id}) => {
-  const pictureElement = templatePicture.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__info').alt = description;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  pictureElement.dataset.pictureElementId = id;
+const renderPicture = (picture) => {
+  const pictureElement = pictureTemplateElement.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = picture.url;
+  pictureElement.querySelector('.picture__img').alt = picture.description;
+  pictureElement.querySelector('.picture__likes').textContent = picture.likes;
+  pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    showPicture(picture);
+  });
   return pictureElement;
 };
 
-const renderPictures = (pictures, container) => {
-  const fragment = document.createDocumentFragment();
-  pictures.forEach((picture) => {
-    const pictureElement = createPicture(picture);
-    fragment.append(pictureElement);
-
-  });
-  container.append(fragment);
+const clearPicturesContainer = () => {
+  if (containerElement.querySelectorAll('a.picture')) {
+    containerElement.querySelectorAll('a.picture').forEach((item) => item.remove());
+  }
 };
 
-export {renderPictures};
+const renderPictures = (pictures) => {
+  clearPicturesContainer();
+
+  const fragment = document.createDocumentFragment();
+  pictures.forEach((picture) => {
+    const pictureElement = renderPicture(picture);
+    fragment.append(pictureElement);
+  });
+  containerElement.append(fragment);
+};
+
+export { renderPictures };

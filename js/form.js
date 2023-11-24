@@ -1,4 +1,8 @@
+import {isEscapeKey} from './util';
 import { init as initEffect, reset as resetEffect } from './effect.js';
+import { uploadData } from './fetch.js';
+import { onScaleBtnClick } from './scale.js';
+import { showErrorMessage, showSuccessMessage } from './status-messages.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_COUNT = 140;
@@ -40,9 +44,9 @@ const hideModal = () => {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 };
-
+const isErrorMessageShow = () => Boolean(document.body.querySelector('.error'));
 function onDocumentKeydown(evt) {
-  if (evt.key === 'Escape' && !isTextFieldFocused()){
+  if (isEscapeKey(evt) && !isTextFieldFocused() && !isErrorMessageShow()){
     evt.preventDefault();
     hideModal();
   }
@@ -53,9 +57,14 @@ const onFileInputChange = () => {
 const onCancelButtonClick = () => {
   hideModal();
 };
-
+const sendForm = () => {
+  showSuccessMessage();
+  hideModal();
+  form.querySelector('.img-upload__submit').disabled = false;
+};
+form.querySelector('.img-upload__scale').addEventListener('click', onScaleBtnClick);
 const validateComment = (value) => {
-  if(value.length <= 140) {
+  if (value.length <= 140) {
     return true;
   }
   return false;
@@ -74,9 +83,13 @@ const hasUniqueTags = (value) => {
   const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
+
 const onFormSubmit = (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
+  evt.preventDefault();
+  if (pristine.validate()) {
+    const data = new FormData(form);
+    form.querySelector('.img-upload__submit').disabled = true;
+    uploadData(sendForm, showErrorMessage, 'POST', data);
   }
 };
 
@@ -116,5 +129,3 @@ fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
 form.addEventListener('submit', onFormSubmit);
 initEffect();
-
-
