@@ -1,6 +1,6 @@
 const TIME_TO_DELETE_MESSAGE = 5000;
 const isEscapeKey = (evt) => evt.key === 'Escape';
-const randomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const randomInteger = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 const getRandomEl = (array) => array[randomInteger(0, array.length - 1)];
 
 const showDataErrorMessage = () => {
@@ -22,5 +22,3 @@ const debounce = (callback, timeoutDelay) => {
 
 export{isEscapeKey, randomInteger, getRandomEl, showDataErrorMessage, debounce};
 
-export class init {
-}
