@@ -1,18 +1,16 @@
-
 import './form';
 import {loadData} from './fetch.js';
 import {renderPictures} from './renderPhoto.js';
-import {showDataErrorMessage} from './util';
+import {showDataErrorMessage} from './util.js';
+import {initFilter} from './filter.js';
 
-
-let photos = [];
 
 const onSuccess = (data) => {
-  photos = data.slice();
-  renderPictures(photos);
+  renderPictures(data);
+  initFilter(data);
   //document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 };
 
 
 loadData(onSuccess, showDataErrorMessage);
-export {photos};
+
