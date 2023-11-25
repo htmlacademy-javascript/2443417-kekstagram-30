@@ -1,7 +1,10 @@
 const TIME_TO_DELETE_MESSAGE = 5000;
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
-const randomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const getRandomEl = (array) => array[randomInteger(0, array.length - 1)];
+
+const getRandomNumber = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
+
+const getRandomArrayEl = (array) => array[getRandomNumber(0, array.length - 1)];
 
 const showDataErrorMessage = () => {
   const message = document.querySelector('#data-error').content.querySelector('.data-error').cloneNode(true);
@@ -19,8 +22,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-
-export{isEscapeKey, randomInteger, getRandomEl, showDataErrorMessage, debounce};
-
-export class init {
-}
+export { isEscapeKey, showDataErrorMessage, getRandomArrayEl, debounce };
