@@ -21,3 +21,6 @@ const debounce = (callback, timeoutDelay) => {
 
 
 export{isEscapeKey, randomInteger, getRandomEl, showDataErrorMessage, debounce};
+
+export class init {
+}
