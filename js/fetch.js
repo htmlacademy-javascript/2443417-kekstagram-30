@@ -7,18 +7,15 @@ const sendRequest = (onSuccess, onFail, method, body) => {
   fetch(
     Urls[method],
     {
-      method: method,
-      body: body,
-    },
+      method,
+      body,
+    }
   )
     .then((response) => response.json())
-    .then((data) =>{
-      onSuccess(data);
-    })
-    .catch((err) => {
-      onFail(err);
-    });
+    .then((data) => onSuccess(data))
+    .catch(() => onFail());
 };
+
 
 const loadData = (onSuccess, onFail, method = 'GET') => sendRequest(onSuccess, onFail, method);
 const uploadData = (onSuccess, onFail, method = 'POST', body) => sendRequest(onSuccess, onFail, method, body);
