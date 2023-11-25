@@ -1,140 +1,119 @@
-const Effect = {
-  DEFAULT: 'none',
+const sliderElement = document.querySelector('.effect-level__slider');
+const imageElement = document.querySelector('.img-upload__preview img');
+const effectInputElement = document.querySelector('.effect-level__value');
+
+const Effects = {
   CHROME: 'chrome',
   SEPIA: 'sepia',
   MARVIN: 'marvin',
   PHOBOS: 'phobos',
   HEAT: 'heat',
+  DEFAULT: 'none',
 };
 
-const effectToFilter = {
-  [Effect.CHROME]: {
+const nameEffectForFilter = {
+  [Effects.CHROME]: {
     style: 'grayscale',
     unit: '',
   },
-  [Effect.SEPIA]: {
+  [Effects.SEPIA]: {
     style: 'sepia',
     unit: '',
   },
-  [Effect.MARVIN]: {
+  [Effects.MARVIN]: {
     style: 'invert',
     unit: '%',
   },
-  [Effect.PHOBOS]: {
+  [Effects.PHOBOS]: {
     style: 'blur',
-    unit: 'px'
+    unit: 'px',
   },
-  [Effect.HEAT]: {
+  [Effects.HEAT]: {
     style: 'brightness',
     unit: '',
-  }
+  },
+  [Effects.DEFAULT]: {
+    style: 'none',
+    unit: '',
+  },
 };
-const effectToSliderOptions = {
-  [Effect.DEFAULT]: {
+
+const sliderOptions = {
+  [Effects.CHROME]: {
+    min: 0,
+    max: 1,
+    step: 0.1
+  },
+  [Effects.SEPIA]: {
+    min: 0,
+    max: 1,
+    step: 0.1
+  },
+  [Effects.MARVIN]: {
     min: 0,
     max: 100,
-    step: 1,
+    step: 1
   },
-  [Effect.CHROME]: {
-    min: 0,
-    max: 1,
-    step: 0.1,
-  },
-  [Effect.SEPIA]: {
-    min: 0,
-    max: 1,
-    step: 0.1,
-  },
-  [Effect.MARVIN]: {
-    min: 0,
-    max: 1,
-    step: 0.1,
-  },
-  [Effect.PHOBOS]: {
+  [Effects.PHOBOS]: {
     min: 0,
     max: 3,
-    step: 0.1,
+    step: 0.1
   },
-  [Effect.HEAT]: {
-    min: 0,
+  [Effects.HEAT]: {
+    min: 1,
     max: 3,
-    step: 0.1,
+    step: 0.1
+  },
+  [Effects.DEFAULT]: {
+    min: 0,
+    max: 100,
+    step: 1
   },
 };
 
-const modalElement = document.querySelector('.img-upload');
-const imageElement = modalElement.querySelector('.img-upload__preview img');
-const effectsElement = modalElement.querySelector('.effects');
-const sliderElement = modalElement.querySelector('.effect-level__slider');
-const sliderContainerElement = modalElement.querySelector('.img-upload__effect-level');
-const effectLevelElement = modalElement.querySelector('.effect-level__value');
+let effectName = Effects.DEFAULT;
 
-let chosenEffect = Effect.DEFAULT;
-const isDefault = () => chosenEffect === Effect.DEFAULT;
-
-const setImagesStyle = () => {
-  if (isDefault()) {
-    imageElement.style.filter = null;
-    return;
+noUiSlider.create(sliderElement, {
+  range: {
+    min: sliderOptions[effectName].min,
+    max: sliderOptions[effectName].max
+  },
+  start: sliderOptions[effectName].max,
+  step: sliderOptions[effectName].step,
+  connect: 'lower',
+  format: {
+    to: (value) => Number(value),
+    from: (value) => Number(value)
   }
-  const { value } = effectLevelElement;
-  const { style, unit} = effectToFilter[chosenEffect];
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  const value = sliderElement.noUiSlider.get();
+  const {style, unit} = nameEffectForFilter[effectName];
+  effectInputElement.value = value;
   imageElement.style.filter = `${style}(${value}${unit})`;
-};
-const showSlider = () => {
-  sliderContainerElement.classList.remove('hidden');
-};
-const hideSlider = () => {
-  sliderContainerElement.classList.add('hidden');
-};
-const onSliderUpdate = () => {
-  effectLevelElement.value = sliderElement.noUiSlider.get();
-  setImagesStyle();
-};
-const createSlider = ({min, max, step}) => {
-  noUiSlider.create(sliderElement, {
-    range: {min, max},
-    step,
-    start: max,
-    connect: 'lower',
-    format: {
-      to: (value) => Number(value),
-      from: (value) => Number(value),
+});
+
+const getUpdateOptions = ({min, max, step}) => ({
+  range: {
+    min,
+    max
+  },
+  start: max,
+  step,
+});
+
+const changeSliderOptions = (evt) => {
+  if (evt.target.closest('input')) {
+    effectName = evt.target.value;
+    sliderElement.noUiSlider.updateOptions(getUpdateOptions(sliderOptions[effectName]));
+    if (effectName === Effects.DEFAULT) {
+      sliderElement.parentNode.classList.add('hidden');
+      imageElement.style.removeProperty('filter');
+      return;
     }
-  });
-  sliderElement.noUiSlider.on('update', onSliderUpdate);
-};
-const updateSlider = ({min, max,step}) => {
-  sliderElement.noUiSlider.updateOptions({
-    range: { min, max },
-    step,
-    start: max,
-  });
-};
-const setSlider = () => {
-  if (isDefault()) {
-    hideSlider();
-  } else {
-    updateSlider(effectToSliderOptions[chosenEffect]);
-    showSlider();
+    sliderElement.parentNode.classList.remove('hidden');
   }
 };
 
-const setEffect = (effect) => {
-  chosenEffect = effect;
-  setSlider();
-  setImagesStyle();
-};
-const reset = () => {
-  setEffect(Effect.DEFAULT);
-};
-const onEffectChange = (evt) => {
-  setEffect(evt.target.value);
-};
-
-const init = () => {
-  createSlider(effectToSliderOptions[chosenEffect]);
-  effectsElement.addEventListener('change', onEffectChange);
-};
-
-export { init, reset };
+export { changeSliderOptions };

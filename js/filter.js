@@ -4,8 +4,8 @@ import { getRandomEl, debounce } from './util.js';
 const RANDOM_PHOTOS_LENGTH = 10;
 const DELAY = 500;
 
-const filterContainer = document.querySelector('.img-filters');
-const filter = filterContainer.querySelector('.img-filters__form');
+const filterContainerElement = document.querySelector('.img-filters');
+const filterElement = filterContainerElement.querySelector('.img-filters__form');
 
 let photos = [];
 
@@ -22,16 +22,21 @@ const getDiscussedPhotos = (data) => {
   return sortPhotos;
 };
 
+const changeActiveFilterBtnClass = (evt) => {
+  filterElement.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
+  evt.target.classList.add('img-filters__button--active');
+};
+
 const setFilter = (cb) => {
-  filter.addEventListener('click', (evt) => {
+  filterElement.addEventListener('click', (evt) => {
     let newPhotos = photos.slice();
-    filter.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
-    evt.target.classList.add('img-filters__button--active');
-    if (evt.target.id.includes('random')) {
-      newPhotos = getRandomPhotos(photos);
-    }
-    if (evt.target.id.includes('discussed')) {
-      newPhotos = getDiscussedPhotos(photos);
+    changeActiveFilterBtnClass(evt);
+    switch (evt.target.id) {
+      case 'filter-random':
+        newPhotos = getRandomPhotos(photos);
+        break;
+      case 'filter-discussed':
+        newPhotos = getDiscussedPhotos(photos);
     }
     cb(newPhotos);
   });
@@ -39,8 +44,8 @@ const setFilter = (cb) => {
 
 const initFilter = (data) => {
   photos = data.slice();
-  filterContainer.classList.remove('img-filters--inactive');
+  filterContainerElement.classList.remove('img-filters--inactive');
   setFilter(debounce(renderPictures, DELAY));
 };
 
-export {initFilter};
+export { initFilter };
