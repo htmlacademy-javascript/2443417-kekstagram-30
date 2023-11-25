@@ -11,4 +11,13 @@ const showDataErrorMessage = () => {
   }, TIME_TO_DELETE_MESSAGE);
 };
 
-export{isEscapeKey, randomInteger, getRandomEl, showDataErrorMessage};
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+
+export{isEscapeKey, randomInteger, getRandomEl, showDataErrorMessage, debounce};
