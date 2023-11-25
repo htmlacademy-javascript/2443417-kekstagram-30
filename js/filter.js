@@ -1,5 +1,5 @@
 import { renderPictures } from './renderPhoto.js';
-import { getRandomEl, debounce } from './util.js';
+import { getRandomArrayEl, debounce } from './util.js';
 
 const RANDOM_PHOTOS_LENGTH = 10;
 const DELAY = 500;
@@ -12,7 +12,7 @@ let photos = [];
 const getRandomPhotos = (data) => {
   const randomPhotos = new Set();
   while (randomPhotos.size < RANDOM_PHOTOS_LENGTH) {
-    randomPhotos.add(getRandomEl(data));
+    randomPhotos.add(getRandomArrayEl(data));
   }
   return randomPhotos;
 };

@@ -1,6 +1,6 @@
 import { isEscapeKey } from './util.js';
 import {changeSliderOptions as onEffectsListClick} from './effect';
-import { uploadData } from './fetch.js';
+import { sendData } from './fetch.js';
 import { onScaleBtnClick } from './scale.js';
 import { showErrorMessage, showSuccessMessage } from './status-messages.js';
 
@@ -120,6 +120,6 @@ formContainerElement.addEventListener('submit', (evt) => {
   if (pristine.validate()) {
     const data = new FormData(formContainerElement);
     formContainerElement.querySelector('.img-upload__submit').disabled = true;
-    uploadData(sendForm, showErrorMessage, 'POST', data);
+    sendData(sendForm, showErrorMessage, 'POST', data);
   }
 });
