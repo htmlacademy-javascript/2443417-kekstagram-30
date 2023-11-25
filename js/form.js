@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { changeSliderOptions as onEffectsListClick } from './effect.js';
+import {changeSliderOptions as onEffectsListClick} from './effect';
 import { uploadData } from './fetch.js';
 import { onScaleBtnClick } from './scale.js';
 import { showErrorMessage, showSuccessMessage } from './status-messages.js';
